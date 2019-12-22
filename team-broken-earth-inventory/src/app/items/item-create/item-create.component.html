@@ -1,4 +1,14 @@
-<textarea rows="6" [(ngModel)]="enteredValue"></textarea>
-<hr>
-<button (click)="onAddItem()">Save Item</button>
+<mat-card>
+    <form (submit)="onAddItem(itemForm)" #itemForm="ngForm">
+        <mat-form-field>
+            <input matInput type="text" name="title" ngModel required minlength="3" placeholder="Item Title" #title="ngModel">
+            <mat-error *ngIf="title.invalid">Please Enter a Valid Item Title!</mat-error> 
+        </mat-form-field>
+        <mat-form-field>
+            <textarea matInput rows="4" name="content" ngModel required minlength="3" placeholder="Item Content" #content="ngModel"></textarea>
+            <mat-error *ngIf="content.invalid">Please Enter Valid Item Content!</mat-error> 
+            <button mat-raised-button color="accent" type="submit">Save Item</button>   
+        </mat-form-field>
+    </form>
+</mat-card>
 <p>{{  newItem  }}</p>
