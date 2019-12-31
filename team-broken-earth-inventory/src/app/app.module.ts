@@ -9,6 +9,7 @@ import { MatInputModule, MatCardModule, MatButtonModule, MatToolbarModule } from
 import { MatExpansionModule } from '@angular/material/expansion';
 import { HeaderComponent } from './header/header.component'
 import { ItemListComponent } from './items/item-list/item-list.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ItemListComponent } from './items/item-list/item-list.component';
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
-    MatExpansionModule
+    MatExpansionModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

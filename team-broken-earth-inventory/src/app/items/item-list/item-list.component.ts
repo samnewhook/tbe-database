@@ -18,7 +18,7 @@ export class ItemListComponent implements OnInit, OnDestroy{
     }
     
     ngOnInit() {
-        this.items = this.itemsService.getItems();
+        this.itemsService.getItems();
         this.itemsSub = this.itemsService.getItemUpdateListener().subscribe((items: Item[]) => {
             this.items = items;
         });
@@ -26,5 +26,9 @@ export class ItemListComponent implements OnInit, OnDestroy{
 
     ngOnDestroy() {
         this.itemsSub.unsubscribe();
+    }
+
+    onDelete(itemId: string) {
+        this.itemsService.deleteItem(itemId);
     }
 }
