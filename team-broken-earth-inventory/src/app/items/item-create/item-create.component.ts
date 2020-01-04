@@ -36,8 +36,17 @@ export class ItemCreateComponent implements OnInit {
         this.isLoading = true;
         this.itemsService.getItem(this.itemId).subscribe(itemData => {
           this.isLoading = false;
-          this.item = {id: itemData._id, title: itemData.title, content: itemData.content};
-          this.form.setValue({title: this.item.title, content: this.item.content});
+          this.item = {
+            id: itemData._id, 
+            title: itemData.title, 
+            content: itemData.content, 
+            imagePath: itemData.imagePath
+          };
+          this.form.setValue({
+            title: this.item.title, 
+            content: this.item.content,
+            image: this.item.imagePath
+          });
         });
       } else {
         this.mode = 'create';
@@ -63,9 +72,14 @@ export class ItemCreateComponent implements OnInit {
     }
     this.isLoading = true;
     if (this.mode === 'create') {
-      this.itemsService.addItem(this.form.value.title, this.form.value.content);
+      this.itemsService.addItem(this.form.value.title, this.form.value.content, this.form.value.image);
     } else {
-      this.itemsService.updateItem(this.itemId, this.form.value.title, this.form.value.content);
+      this.itemsService.updateItem(
+        this.itemId, 
+        this.form.value.title, 
+        this.form.value.content,
+        this.form.value.image
+        );
     }
     this.form.reset();
   }
