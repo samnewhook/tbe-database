@@ -14,4 +14,11 @@
         </mat-action-row>
     </mat-expansion-panel>
 </mat-accordion>
+<mat-paginator 
+[length]="totalItems" 
+[pageSize]="itemsPerPage" 
+[pageSizeOptions]="pageSizeOptions"
+(page)="onChangedPage($event)"
+*ngIf="items.length > 0"
+></mat-paginator>
 <p class="info-text mat-body-1" *ngIf="items.length <= 0 && !isLoading">No Items yet!</p>

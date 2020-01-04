@@ -8,25 +8,37 @@ import { Router } from '@angular/router';
 @Injectable({providedIn: 'root'})
 export class ItemsService {
     private items: Item[] = [];
-    private itemsUpdated = new Subject<Item[]>()
+    private itemsUpdated = new Subject<{
+        items: Item[],
+        itemCount: number
+    }>()
 
     constructor(private http: HttpClient, private router: Router) {}
 
-    getItems() {
-        this.http.get<{message: string, items: any}>('http://localhost:3000/items')
+    getItems(itemsPerPage: number, currentPage: number) {
+        const queryParams = `?pagesize=${itemsPerPage}&page=${currentPage}`;
+        this.http.get<{
+            message: string, 
+            items: any, 
+            maxItems: number
+        }>('http://localhost:3000/items' + queryParams)
             .pipe(map((itemData) => {
-                return itemData.items.map(item => {
+                return { items: itemData.items.map(item => {
                     return {
                         title: item.title,
                         content: item.content,
                         id: item._id,
                         imagePath: item.imagePath
                     };
+                }),
+                maxItems: itemData.maxItems
+            }}))
+            .subscribe(transformedItemsData => {
+                this.items = transformedItemsData.items;
+                this.itemsUpdated.next({
+                    items: [...this.items], 
+                    itemCount: transformedItemsData.maxItems
                 });
-            }))
-            .subscribe(transformedItems => {
-                this.items = transformedItems;
-                this.itemsUpdated.next([...this.items]);
             });
     }
 
@@ -51,14 +63,6 @@ export class ItemsService {
         itemData.append("image", image, title)
         this.http.post<{message: string, item: Item}>('http://localhost:3000/items', itemData)
         .subscribe((responseData) => {
-            const item: Item = {
-                id: responseData.item.id, 
-                title: title, 
-                content: content, 
-                imagePath: responseData.item.imagePath
-            };
-            this.items.push(item);
-            this.itemsUpdated.next([...this.items])
             this.router.navigate(["/"]);
         });
     }
@@ -81,27 +85,11 @@ export class ItemsService {
         }
         this.http.put("http://localhost:3000/items/" + id, itemData)
         .subscribe(response => {
-            const updatedItems = [...this.items];
-            const oldItemIndex = updatedItems.findIndex(p => p.id === id);
-            const item: Item = {
-                id: id,
-                title: title,
-                content: content,
-                imagePath: ''//response.imagePath
-            }
-            updatedItems[oldItemIndex] = item;
-            this.items = updatedItems;
-            this.itemsUpdated.next([...this.items]);
             this.router.navigate(["/"]);
         });
     }
 
     deleteItem(itemId: string) {
-        this.http.delete("http://localhost:3000/items/" + itemId)
-        .subscribe(() => {
-            const updatedItems = this.items.filter(item => item.id !== itemId);
-            this.items = updatedItems;
-            this.itemsUpdated.next([...this.items]);
-        });
+        return this.http.delete("http://localhost:3000/items/" + itemId);
     }
 }
