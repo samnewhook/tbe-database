@@ -4,5 +4,9 @@
 }
 
 .info-text {
-    text-align: center
+    text-align: center;
+}
+
+mat-spinner {
+    margin: auto;
 }
