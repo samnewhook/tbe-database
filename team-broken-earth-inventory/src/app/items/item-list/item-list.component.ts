@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs'
 import { Item } from '../item.model'
 import {ItemsService} from '../items.service'
 import { PageEvent } from '@angular/material';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
     selector: 'app-item-list',
@@ -18,8 +19,10 @@ export class ItemListComponent implements OnInit, OnDestroy{
     currentPage = 1;
     pageSizeOptions = [1, 2, 5, 10]
     isLoading = false;
+    authStatusSub: Subscription;
+    public userIsAuthenticated = false;
 
-    constructor(public itemsService: ItemsService) {
+    constructor(public itemsService: ItemsService, private authService: AuthService) {
 
     }
     
@@ -31,6 +34,11 @@ export class ItemListComponent implements OnInit, OnDestroy{
             this.totalItems = itemData.itemCount;
             this.items = itemData.items;
         });
+        this.userIsAuthenticated = this.authService.getIsAuth();
+        this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
+            console.log(isAuthenticated)
+            this.userIsAuthenticated = isAuthenticated;
+        })
     }
 
     onChangedPage(pageData: PageEvent) {
@@ -42,6 +50,7 @@ export class ItemListComponent implements OnInit, OnDestroy{
 
     ngOnDestroy() {
         this.itemsSub.unsubscribe();
+        this.authStatusSub.unsubscribe();
     }
 
     onDelete(itemId: string) {
