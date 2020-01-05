@@ -35,7 +35,8 @@ multer({storage: storage}).single("image"), (req, res, next) => {
     const item = new Item({
         title: req.body.title,
         content: req.body.content,
-        imagePath: url + "/images/" + req.file.filename
+        imagePath: url + "/images/" + req.file.filename,
+        creator: req.userData.userId
     });
     item.save().then(createdItem => {
         res.status(201).json({
@@ -63,8 +64,11 @@ multer({storage: storage}).single("image"), (req, res, next) => {
         imagePath: imagePath
     });
     Item.updateOne({_id: req.params.id}, item).then(result => {
-        console.log(result);
-        res.status(200).json({message: "Update Successful!"});
+        if (result.nModified > 0){
+            res.status(200).json({message: "Update Successful!"});
+        } else {
+            res.status(401).json({message: "Not Authorized."});
+        }
     });
 });
 
@@ -103,8 +107,11 @@ checkAuth,
 (req, res, next) => {
     Item.deleteOne({_id: req.params.id}).then(
         result => {
-            console.log(result);
-            res.status(200).json({message: 'Post Deleted!'});
+            if (result.n > 0){
+                res.status(200).json({message: "Item Deleted!"});
+            } else {
+                res.status(401).json({message: "Not Authorized."});
+            }           
         }
     );
 });

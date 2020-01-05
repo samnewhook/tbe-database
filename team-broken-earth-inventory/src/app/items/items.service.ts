@@ -28,7 +28,8 @@ export class ItemsService {
                         title: item.title,
                         content: item.content,
                         id: item._id,
-                        imagePath: item.imagePath
+                        imagePath: item.imagePath,
+                        creator: item.creator
                     };
                 }),
                 maxItems: itemData.maxItems
