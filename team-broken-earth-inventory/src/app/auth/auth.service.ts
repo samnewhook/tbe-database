@@ -12,6 +12,7 @@ export class AuthService {
     private token: string;
     private authStatusListener = new Subject<boolean>();
     private tokenTimer: any;
+    private isAdmin = false;
 
     constructor(private http: HttpClient, private router: Router) {
 
@@ -25,20 +26,27 @@ export class AuthService {
         return this.isAuthenticated;
     }
 
+    getIsAdmin() {
+        return this.isAdmin;
+    }
+
     getAuthStatusListener() {
         return this.authStatusListener.asObservable();
     }
 
-    createUser(email: string, password: string) {
-        const authData: AuthData = { email: email, password: password };
+    createUser(email: string, password: string, role: string) {
+        if (!this.isAdmin) {
+            return;
+        }
+        const authData: AuthData = { email: email, password: password, role: role };
         this.http.post("http://localhost:3000/users/signup", authData)
             .subscribe(response => {
                 console.log(response);
             });
     }
 
-    login(email: string, password: string) {
-        const authData: AuthData = { email: email, password: password };
+    login(email: string, password: string, role: string) {
+        const authData: AuthData = { email: email, password: password, role: role };
         this.http.post<{ token: string, expiresIn: number }>("http://localhost:3000/users/login", authData)
             .subscribe(response => {
                 const token = response.token;
@@ -50,6 +58,10 @@ export class AuthService {
                     this.authStatusListener.next(true);
                     const now = new Date();
                     const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
+                    const userRole = response.token;
+                    if (userRole === "admin") {
+                        this.isAdmin = true;
+                    }
                     this.saveAuthData(token, expirationDate);
                     this.router.navigate(['/']);
                 }
