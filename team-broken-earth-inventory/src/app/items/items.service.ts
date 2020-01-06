@@ -28,7 +28,8 @@ export class ItemsService {
                         title: item.title,
                         content: item.content,
                         id: item._id,
-                        imagePath: item.imagePath
+                        imagePath: item.imagePath,
+                        creator: item.creator
                     };
                 }),
                 maxItems: itemData.maxItems
@@ -53,7 +54,9 @@ export class ItemsService {
             _id: string, 
             title: string, 
             content: string, 
-            imagePath: string}>("http://localhost:3000/items/" + id);
+            imagePath: string,
+            creator: string
+        }>("http://localhost:3000/items/" + id);
     }
 
     addItem(title: string, content: string, image: File) {
@@ -80,7 +83,8 @@ export class ItemsService {
                 id: id,
                 title: title,
                 content: content,
-                imagePath: image
+                imagePath: image,
+                creator: null
             }
         }
         this.http.put("http://localhost:3000/items/" + id, itemData)

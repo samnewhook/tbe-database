@@ -40,7 +40,8 @@ export class ItemCreateComponent implements OnInit {
             id: itemData._id, 
             title: itemData.title, 
             content: itemData.content, 
-            imagePath: itemData.imagePath
+            imagePath: itemData.imagePath,
+            creator: itemData.creator
           };
           this.form.setValue({
             title: this.item.title, 

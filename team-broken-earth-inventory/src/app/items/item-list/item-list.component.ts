@@ -21,14 +21,16 @@ export class ItemListComponent implements OnInit, OnDestroy{
     isLoading = false;
     authStatusSub: Subscription;
     public userIsAuthenticated = false;
+    userId: string;
 
     constructor(public itemsService: ItemsService, private authService: AuthService) {
 
     }
     
     ngOnInit() {
-        this.itemsService.getItems(this.itemsPerPage, this.currentPage);
         this.isLoading = true;
+        this.itemsService.getItems(this.itemsPerPage, this.currentPage);
+        this.userId = this.authService.getUserId();
         this.itemsSub = this.itemsService.getItemUpdateListener().subscribe((itemData: {items: Item[], itemCount: number}) => {
             this.isLoading = false;
             this.totalItems = itemData.itemCount;
@@ -36,8 +38,8 @@ export class ItemListComponent implements OnInit, OnDestroy{
         });
         this.userIsAuthenticated = this.authService.getIsAuth();
         this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
-            console.log(isAuthenticated)
             this.userIsAuthenticated = isAuthenticated;
+            this.userId = this.authService.getUserId();
         })
     }
 
