@@ -17,7 +17,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         console.log(this.authService.getAuthStatusListener());
         this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
             authStatus => {
-                console.log('hello');
                 this.isLoading = false;
             }
         );
