@@ -46,6 +46,11 @@ multer({storage: storage}).single("image"), (req, res, next) => {
                 id: createdItem._id
             }
         });
+    })
+    .catch(error => {
+        res.status(500).json({
+            message: "Creating a post failed!"
+        })
     });
 });
 
@@ -70,6 +75,11 @@ multer({storage: storage}).single("image"), (req, res, next) => {
         } else {
             res.status(401).json({message: "Not Authorized."});
         }
+    })
+    .catch(error => {
+        res.status(500).json({
+            message: "Couldn't update post!"
+        });
     });
 });
 
@@ -90,6 +100,9 @@ router.get("", (req, res, next) => {
             items: fetchedItems,
             maxItems: count
         });
+    })
+    .catch(error => {
+        res.status.json({message: "Fetching items failed!"});
     });
 });
 
@@ -100,7 +113,9 @@ router.get("/:id", (req, res, next) => {
         } else {
             res.status(404).json({message: 'Item not found!'});
         }
-    })
+    }).catch(error => {
+        res.status.json({message: "Fetching items failed!"});
+    });
 });
 
 router.delete("/:id", 
@@ -114,7 +129,9 @@ checkAuth,
                 res.status(401).json({message: "Not Authorized."});
             }      
         }
-    );
+    ).catch(error => {
+        res.status.json({message: "Fetching items failed!"});
+    });
 });
 
 module.exports = router;

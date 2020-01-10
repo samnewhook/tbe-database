@@ -59,6 +59,8 @@ export class ItemListComponent implements OnInit, OnDestroy{
         this.isLoading = true;
         this.itemsService.deleteItem(itemId).subscribe(() => {
             this.itemsService.getItems(this.itemsPerPage, this.currentPage);
+        }, () => {
+            this.isLoading = false;
         });
     }
 }
