@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { ItemCreateComponent } from './items/item-create/item-create.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatInputModule, MatCardModule, MatButtonModule, MatToolbarModule, MatProgressSpinnerModule, MatPaginatorModule } from '@angular/material';
+import { MatInputModule, MatCardModule, MatButtonModule, MatToolbarModule, MatProgressSpinnerModule, MatPaginatorModule, MatDialogModule } from '@angular/material';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { HeaderComponent } from './header/header.component'
 import { ItemListComponent } from './items/item-list/item-list.component';
@@ -15,6 +15,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { ErrorInterceptor } from './error-interceptor';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ErrorInterceptor } from './error-interceptor';
     HeaderComponent,
     ItemListComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -38,12 +40,14 @@ import { ErrorInterceptor } from './error-interceptor';
     HttpClientModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ErrorComponent]
 })
 export class AppModule { }

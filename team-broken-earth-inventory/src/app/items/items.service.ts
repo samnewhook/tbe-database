@@ -63,7 +63,7 @@ export class ItemsService {
         const itemData = new FormData();
         itemData.append("title", title);
         itemData.append("content", content);
-        itemData.append("image", image, title)
+        itemData.append("image", image, title);
         this.http.post<{message: string, item: Item}>('http://localhost:3000/items', itemData)
         .subscribe((responseData) => {
             this.router.navigate(["/"]);
