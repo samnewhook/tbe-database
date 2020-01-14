@@ -8,7 +8,6 @@ const userRoutes = require("./routes/user");
 
 const app = express();
 
-console.log(process.env);
 mongoose.connect("mongodb+srv://sam:" + process.env.MONGO_ATLAS_PW + "@tbe-inventory-def3a.mongodb.net/tbe-inventory?retryWrites=true&w=majority")
 .then(() => {
     console.log('connection is working')

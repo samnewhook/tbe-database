@@ -14,7 +14,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     constructor(public authService: AuthService) {}
 
     ngOnInit() {
-        console.log(this.authService.getAuthStatusListener());
         this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
             authStatus => {
                 this.isLoading = false;
