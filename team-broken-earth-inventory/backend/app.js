@@ -18,7 +18,7 @@ mongoose.connect("mongodb+srv://sam:" + process.env.MONGO_ATLAS_PW + "@tbe-inven
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use("/images", express.static(path.join("backend/images")));
+app.use("/images", express.static(path.join("images")));
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
