@@ -5,6 +5,10 @@ import { HttpClient } from '@angular/common/http'
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
+import { environment } from "../../environments/environment";
+
+const BACKEND_URL = environment.apiUrl + "/items";
+
 @Injectable({providedIn: 'root'})
 export class ItemsService {
     private items: Item[] = [];
@@ -21,7 +25,7 @@ export class ItemsService {
             message: string, 
             items: any, 
             maxItems: number
-        }>('http://localhost:3000/items' + queryParams)
+        }>(BACKEND_URL + queryParams)
             .pipe(map((itemData) => {
                 return { items: itemData.items.map(item => {
                     return {
@@ -56,7 +60,7 @@ export class ItemsService {
             content: string, 
             imagePath: string,
             creator: string
-        }>("http://localhost:3000/items/" + id);
+        }>(BACKEND_URL + "/" + id);
     }
 
     addItem(title: string, content: string, image: File) {
@@ -64,7 +68,7 @@ export class ItemsService {
         itemData.append("title", title);
         itemData.append("content", content);
         itemData.append("image", image, title);
-        this.http.post<{message: string, item: Item}>('http://localhost:3000/items', itemData)
+        this.http.post<{message: string, item: Item}>(BACKEND_URL, itemData)
         .subscribe((responseData) => {
             this.router.navigate(["/"]);
         });
@@ -87,13 +91,13 @@ export class ItemsService {
                 creator: null
             }
         }
-        this.http.put("http://localhost:3000/items/" + id, itemData)
+        this.http.put(BACKEND_URL + "/" + id, itemData)
         .subscribe(response => {
             this.router.navigate(["/"]);
         });
     }
 
     deleteItem(itemId: string) {
-        return this.http.delete("http://localhost:3000/items/" + itemId);
+        return this.http.delete(BACKEND_URL + "/" + itemId);
     }
 }

@@ -8,7 +8,8 @@ const userRoutes = require("./routes/user");
 
 const app = express();
 
-mongoose.connect('mongodb+srv://sam:YWHGxUbIkzqseUFX@tbe-inventory-def3a.mongodb.net/tbe-inventory?retryWrites=true&w=majority')
+console.log(process.env);
+mongoose.connect("mongodb+srv://sam:" + process.env.MONGO_ATLAS_PW + "@tbe-inventory-def3a.mongodb.net/tbe-inventory?retryWrites=true&w=majority")
 .then(() => {
     console.log('connection is working')
 })
@@ -33,7 +34,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/items", itemsRoutes);
-app.use("/users", userRoutes);
+app.use("/api/items", itemsRoutes);
+app.use("/api/users", userRoutes);
 
 module.exports = app;
