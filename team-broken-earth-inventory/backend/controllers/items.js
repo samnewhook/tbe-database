@@ -62,7 +62,7 @@ exports.getItems = (req, res, next) => {
     }
     itemQuery.then(documents => {
         fetchedItems = documents;
-        return Item.count();
+        return Item.countDocuments();
     }).then(count => {
         res.status(200).json({
             message: "Items fetched successfully!",

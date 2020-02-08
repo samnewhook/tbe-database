@@ -9,6 +9,9 @@ const userRoutes = require("./routes/user");
 
 const app = express();
 
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose.set('useCreateIndex', true);
 mongoose.connect("mongodb+srv://sam:" + process.env.MONGO_ATLAS_PW + "@tbe-inventory-def3a.mongodb.net/tbe-inventory?retryWrites=true&w=majority")
 .then(() => {
     console.log('connection is working')
